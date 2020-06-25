@@ -28,6 +28,7 @@ const Modal: React.FC<IModalProps> = ({ children, isOpen, setIsOpen }) => {
     <ReactModal
       shouldCloseOnOverlayClick={!false}
       onRequestClose={setIsOpen}
+      closeTimeoutMS={200}
       isOpen={modalStatus}
       ariaHideApp={false}
       style={{
