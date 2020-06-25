@@ -48,6 +48,7 @@ const Input: React.FC<IInputProps> = ({
       ref: inputRef.current,
       path: 'value',
     });
+    setIsFilled(!!inputRef.current?.value);
   }, [fieldName, registerField]);
 
   return (

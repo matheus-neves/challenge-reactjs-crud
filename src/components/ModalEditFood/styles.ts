@@ -42,3 +42,18 @@ export const Form = styled(Unform)`
     }
   }
 `;
+
+export const DualInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  & + div {
+    margin-top: 24px;
+  }
+
+  div:first-child {
+    width: 70%;
+    margin-right: 16px;
+  }
+`;

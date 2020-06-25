@@ -2,7 +2,9 @@ import React, { useRef, useCallback } from 'react';
 
 import { FiCheckSquare } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
-import { Form } from './styles';
+import * as Yup from 'yup';
+import getValidationErrors from '../../utils/getValidationErrors';
+import { Form, DualInputContainer } from './styles';
 import Modal from '../Modal';
 import Input from '../Input';
 
@@ -39,7 +41,29 @@ const ModalEditFood: React.FC<IModalProps> = ({
 
   const handleSubmit = useCallback(
     async (data: IEditFoodData) => {
-      // EDIT A FOOD PLATE AND CLOSE THE MODAL
+      try {
+        formRef.current?.setErrors({});
+
+        const schema = Yup.object().shape({
+          image: Yup.string().url('Url inválida').required('Campo obrigatório'),
+          name: Yup.string().required('Campo obrigatório'),
+          price: Yup.string().required('Campo obrigatório'),
+          description: Yup.string().required('Campo obrigatório'),
+        });
+
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
+        handleUpdateFood(data);
+
+        setIsOpen();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+          formRef.current?.setErrors(errors);
+        }
+      }
     },
     [handleUpdateFood, setIsOpen],
   );
@@ -48,12 +72,36 @@ const ModalEditFood: React.FC<IModalProps> = ({
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Form ref={formRef} onSubmit={handleSubmit} initialData={editingFood}>
         <h1>Editar Prato</h1>
-        <Input name="image" placeholder="Cole o link aqui" />
 
-        <Input name="name" placeholder="Ex: Moda Italiana" />
-        <Input name="price" placeholder="Ex: 19.90" />
+        <Input
+          name="image"
+          id="image"
+          textLabel="URL da imagem"
+          placeholder="Cole o link aqui"
+        />
 
-        <Input name="description" placeholder="Descrição" />
+        <DualInputContainer>
+          <Input
+            name="name"
+            id="name"
+            textLabel="Nome do prato"
+            placeholder="Ex: Moda Italiana"
+          />
+
+          <Input
+            name="price"
+            id="price"
+            textLabel="Preço"
+            placeholder="Ex: 19.90"
+          />
+        </DualInputContainer>
+
+        <Input
+          name="description"
+          id="description"
+          textLabel="Descrição do prato"
+          placeholder="Descrição"
+        />
 
         <button type="submit" data-testid="edit-food-button">
           <div className="text">Editar Prato</div>
