@@ -2,11 +2,34 @@ import styled, { css } from 'styled-components';
 
 interface IFoodPlateProps {
   available: boolean;
+  state: string;
+  delayAnimation: boolean;
+  index: number;
+  calc?: number;
 }
 
-export const Container = styled.div<IFoodPlateProps>`
+export const Container = styled.div.attrs(
+  ({ delayAnimation, index }: IFoodPlateProps) => ({
+    delay: delayAnimation ? index * 0.15 : 0,
+  }),
+)<IFoodPlateProps>`
   background: #f0f0f5;
   border-radius: 8px;
+
+  transition: opacity, transform, 2s cubic-bezier(0.5, 1, 0.89, 1);
+  transition-delay: ${({ state, delay }) => (state === 'entered' ? delay : 0)}s;
+
+  opacity: ${({ state }) => (state === 'entered' ? 1 : 0)};
+  transform: translateY(${({ state }) => (state === 'entered' ? 0 : 150)}px);
+
+  &:hover {
+    transition: 0.4s;
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.45);
+
+    img {
+      transform: scale(1.2);
+    }
+  }
 
   header {
     background: #ffb84d;
@@ -23,6 +46,7 @@ export const Container = styled.div<IFoodPlateProps>`
       `};
 
     img {
+      transition: 0.4s;
       pointer-events: none;
       user-select: none;
     }

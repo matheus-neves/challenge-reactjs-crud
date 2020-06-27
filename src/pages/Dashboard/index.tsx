@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { Transition } from 'react-transition-group';
 import Header from '../../components/Header';
 
 import api from '../../services/api';
@@ -21,6 +22,7 @@ interface IFoodPlate {
 
 const Dashboard: React.FC = () => {
   const [foods, setFoods] = useState<IFoodPlate[]>([]);
+  const [delayAnimation, setDelayAnimation] = useState(true);
   const [editingFood, setEditingFood] = useState<IFoodPlate>({} as IFoodPlate);
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -28,19 +30,20 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     async function loadFoods(): Promise<void> {
       const response = await api.get('/foods');
-
       setFoods(response.data);
     }
 
     loadFoods();
+
+    setTimeout(() => {
+      setDelayAnimation(false);
+    }, 1000);
   }, []);
 
   async function handleAddFood(
     food: Omit<IFoodPlate, 'id' | 'available'>,
   ): Promise<void> {
     try {
-      // TODO ADD A NEW FOOD PLATE TO THE API
-
       const formatedData = {
         ...food,
         available: true,
@@ -82,7 +85,13 @@ const Dashboard: React.FC = () => {
   }
 
   async function handleDeleteFood(id: number): Promise<void> {
-    // TODO DELETE A FOOD PLATE FROM THE API
+    await api.delete(`/foods/${id}`);
+
+    const copyOfFoods = [...foods];
+
+    const data = copyOfFoods.filter(food => food.id !== id);
+
+    setFoods(data);
   }
 
   function toggleModal(): void {
@@ -116,15 +125,20 @@ const Dashboard: React.FC = () => {
       />
 
       <FoodsContainer data-testid="foods-list">
-        {foods &&
-          foods.map(food => (
-            <Food
-              key={food.id}
-              food={food}
-              handleDelete={handleDeleteFood}
-              handleEditFood={handleEditFood}
-            />
-          ))}
+        {foods.map((food, index) => (
+          <Transition in timeout={600} key={food.id}>
+            {state => (
+              <Food
+                food={food}
+                state={state}
+                index={index}
+                delayAnimation={delayAnimation}
+                handleDelete={handleDeleteFood}
+                handleEditFood={handleEditFood}
+              />
+            )}
+          </Transition>
+        ))}
       </FoodsContainer>
     </>
   );
