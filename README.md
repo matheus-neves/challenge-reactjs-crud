@@ -25,9 +25,9 @@
 </p>
 
 <br/>
-<p align="center"><img src="
-./.github/demo.gif"/></p>
-<br/>
+<p align="center"><img src=".github/demo.gif"/></p>
+
+---
 
 ## :rocket: About the Challenge
 
