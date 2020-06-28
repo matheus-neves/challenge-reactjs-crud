@@ -16,7 +16,7 @@ export const Container = styled.div.attrs(
   background: #f0f0f5;
   border-radius: 8px;
 
-  transition: opacity, transform, 2s cubic-bezier(0.5, 1, 0.89, 1);
+  transition: opacity, transform, 0.6s cubic-bezier(0.5, 1, 0.89, 1);
   transition-delay: ${({ state, delay }) => (state === 'entered' ? delay : 0)}s;
 
   opacity: ${({ state }) => (state === 'entered' ? 1 : 0)};

@@ -32,17 +32,16 @@ const Dashboard: React.FC = () => {
       const response = await api.get('/foods');
       setFoods(response.data);
     }
-
     loadFoods();
-
-    setTimeout(() => {
-      setDelayAnimation(false);
-    }, 1000);
   }, []);
 
   async function handleAddFood(
     food: Omit<IFoodPlate, 'id' | 'available'>,
   ): Promise<void> {
+    if (delayAnimation) {
+      setDelayAnimation(false);
+    }
+
     try {
       const formatedData = {
         ...food,
