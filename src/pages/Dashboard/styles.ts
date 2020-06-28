@@ -8,8 +8,10 @@ export const FoodsContainer = styled(TransitionGroup)`
   padding: 40px 0;
   margin-top: -140px;
 
-  display: grid;
+  > div {
+    display: grid;
 
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 32px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 32px;
+  }
 `;

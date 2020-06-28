@@ -123,21 +123,23 @@ const Dashboard: React.FC = () => {
         handleUpdateFood={handleUpdateFood}
       />
 
-      <FoodsContainer data-testid="foods-list">
-        {foods.map((food, index) => (
-          <Transition in timeout={600} key={food.id}>
-            {state => (
-              <Food
-                food={food}
-                state={state}
-                index={index}
-                delayAnimation={delayAnimation}
-                handleDelete={handleDeleteFood}
-                handleEditFood={handleEditFood}
-              />
-            )}
-          </Transition>
-        ))}
+      <FoodsContainer>
+        <div data-testid="foods-list">
+          {foods.map((food, index) => (
+            <Transition in timeout={600} key={food.id}>
+              {state => (
+                <Food
+                  food={food}
+                  state={state}
+                  index={index}
+                  delayAnimation={delayAnimation}
+                  handleDelete={handleDeleteFood}
+                  handleEditFood={handleEditFood}
+                />
+              )}
+            </Transition>
+          ))}
+        </div>
       </FoodsContainer>
     </>
   );
